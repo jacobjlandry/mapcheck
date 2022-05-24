@@ -1,0 +1,39 @@
+version: "3.3"
+services:
+  app:
+    build:
+      args:
+        user: mapper
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: mapcheck
+    ports:
+      - 19006:19006
+    restart: unless-stopped
+    working_dir: /var/www/
+    environment:
+        APP_NAME: "MapCheck"
+        APP_ENV: "Local"
+    volumes:
+      - ./:/var/www
+    networks:
+      - mapcheck
+  # nginx:
+  #   image: nginx:alpine
+  #   restart: unless-stopped
+  #   ports:
+  #     - 80:80
+  #   volumes:
+  #     - ./:/var/www
+  #     - ./docker-compose/nginx:/etc/nginx/conf.d/
+  #   networks:
+  #     - mapcheck
+
+networks:
+  mapcheck:
+    driver: bridge
+
+volumes:
+  mongodb:
+    driver: local
